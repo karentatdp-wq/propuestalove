@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Una Pregunta Especial 💕</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Pantalla inicial con corazones */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffc3a0 0%, #ffafbd 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        #intro-text {
+            font-size: 3em;
+            color: white;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite;
+            padding: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            border: 3px solid white;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* Corazones estilo Minecraft */
+        .minecraft-heart {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            image-rendering: pixelated;
+            animation: float 4s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% { 
+                transform: translateY(-30px) rotate(10deg);
+                opacity: 0.8;
+            }
+        }
+
+        /* Pantalla principal */
+        #main-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            animation: slideIn 0.5s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #e91e63;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        button {
+            padding: 20px 50px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        #yes-btn {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+
+        #yes-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(56, 239, 125, 0.4);
+        }
+
+        #no-btn {
+            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            color: white;
+            position: relative;
+        }
+
+        /* Pantalla de éxito */
+        #success-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+
+        #success-screen h1 {
+            font-size: 4em;
+            color: #FFD700;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: fireworkExplosion 1s ease-out forwards;
+        }
+
+        @keyframes fireworkExplosion {
+            0% {
+                transform: translate(0, 0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--x), var(--y));
+                opacity: 0;
+            }
+        }
+
+        #couple-photo {
+            max-width: 400px;
+            border-radius: 20px;
+            margin: 30px auto;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            border: 5px solid white;
+        }
+        /* Corazones flotantes alrededor de la foto */
+.floating-heart {
+    position: absolute;
+    font-size: 2em;
+    animation: floatAround 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes floatAround {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+        opacity: 1;
+    }
+    25% {
+        transform: translateY(-20px) rotate(10deg) scale(1.2);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-40px) rotate(-10deg) scale(1);
+        opacity: 1;
+    }
+    75% {
+        transform: translateY(-20px) rotate(5deg) scale(1.1);
+        opacity: 0.9;
+    }
+}
+
+        /* Pantalla de tristeza */
+        #sad-screen {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            color: white;
+        }
+
+        #sad-screen h1 {
+            font-size: 3em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .broken-heart {
+            font-size: 5em;
+            animation: shake 0.5s infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        #sad-photo {
+            max-width: 400px;
+            border-radius: 20px;
+            margin: 30px auto;
+            filter: grayscale(100%);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+
+        /* Corazones rotos cayendo */
+        .broken-heart-particle {
+            position: absolute;
+            font-size: 3em;
+            animation: fall 3s linear infinite;
+            opacity: 0.7;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -100px;
+                opacity: 1;
+            }
+            100% {
+                top: 110vh;
+                opacity: 0;
+            }
+        }
+
+        /* ========================================
+           ESTILOS RESPONSIVE (SOLO AGREGADOS)
+           ======================================== */
+
+        /* Tablets y pantallas medianas */
+        @media (max-width: 768px) {
+            #intro-text {
+                font-size: 2em;
+                padding: 25px;
+            }
+
+            #main-screen {
+                padding: 30px 20px;
+                max-width: 90%;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+
+            #main-screen p {
+                font-size: 1.3em !important;
+                margin: 15px 0 !important;
+            }
+
+            button {
+                padding: 15px 40px;
+                font-size: 1.3em;
+            }
+
+            #success-screen h1 {
+                font-size: 3em;
+            }
+
+            #couple-photo {
+                max-width: 350px;
+                width: 90%;
+                height: auto;
+            }
+
+            #sad-screen h1 {
+                font-size: 2.5em;
+                margin-bottom: 20px;
+            }
+
+            .broken-heart {
+                font-size: 4em;
+            }
+
+            #sad-photo {
+                max-width: 350px;
+                width: 90%;
+                height: auto;
+            }
+        }
+
+        /* Móviles */
+        @media (max-width: 480px) {
+            #intro-text {
+                font-size: 1.5em;
+                padding: 20px;
+                border-radius: 15px;
+            }
+
+            #main-screen {
+                padding: 25px 15px;
+                max-width: 95%;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+                margin-bottom: 15px;
+            }
+
+            #main-screen p {
+                font-size: 1.1em !important;
+                margin: 12px 0 !important;
+            }
+
+            .buttons-container {
+                flex-wrap: wrap;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            button {
+                padding: 12px 30px;
+                font-size: 1.1em;
+                border-radius: 12px;
+            }
+
+            #success-screen {
+                padding: 20px;
+            }
+
+            #success-screen h1 {
+                font-size: 2em;
+            }
+
+            #couple-photo {
+                max-width: 280px;
+                width: 95%;
+                margin: 20px auto;
+                border: 3px solid white;
+            }
+
+            .floating-heart {
+                font-size: 1.5em;
+            }
+
+            #sad-screen {
+                padding: 20px;
+            }
+
+            #sad-screen h1 {
+                font-size: 2em;
+                margin-bottom: 15px;
+            }
+
+            .broken-heart {
+                font-size: 3em;
+            }
+
+            #sad-photo {
+                max-width: 280px;
+                width: 95%;
+                margin: 20px auto;
+            }
+
+            .broken-heart-particle {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de introducción -->
+    <div id="intro-screen" onclick="startExperience()">
+        <div id="intro-text">👆 Toca para empezar 👆</div>
+    </div>
+
+    <!-- Pantalla principal -->
+    <div id="main-screen">
+        <h1>Mi amor ❤️</h1>
+        <p style="font-size: 1.5em; color: #333; margin: 20px 0;">
+            <br>
+            ¿Te gustaría ir a una cita conmigo el 22 de febrero?
+        </p>
+        <div class="buttons-container">
+            <button id="yes-btn" onclick="sayYes()">Sí 💕</button>
+            <button id="no-btn" onclick="sayNo()">No</button>
+        </div>
+    </div>
+
+    <!-- Pantalla de éxito -->
+    <div id="success-screen">
+        <h1>¡QUE VIVA EL AMOR! 🎉</h1>
+        <img id="couple-photo" src="foto_nosotros.jpg" alt="Nuestra foto">
+    </div>
+
+    <!-- Pantalla de tristeza -->
+    <div id="sad-screen">
+        <h1>😢</h1>
+        <div class="broken-heart">💔</div>
+        <img id="sad-photo" src="foto_triste.jpg" alt="Foto triste">
+    </div>
+
+    <!-- Audio elements -->
+    <audio id="background-music" loop>
+        <source src="musica_romantica.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="success-music">
+        <source src="musica_celebracion.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="sad-music">
+        <source src="musica_triste.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        let noClickCount = 0;
+        let backgroundMusic = document.getElementById('background-music');
+        let successMusic = document.getElementById('success-music');
+        let sadMusic = document.getElementById('sad-music');
+
+        // Crear corazones estilo Minecraft
+        function createMinecraftHearts() {
+            const heartsContainer = document.getElementById('intro-screen');
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'minecraft-heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        createMinecraftHearts();
+
+        function startExperience() {
+            document.getElementById('intro-screen').style.display = 'none';
+            document.getElementById('main-screen').style.display = 'block';
+            backgroundMusic.play();
+        }
+
+        function sayYes() {
+            backgroundMusic.pause();
+            document.getElementById('main-screen').style.display = 'none';
+            document.getElementById('success-screen').style.display = 'block';
+            successMusic.play();
+            createFireworks();
+        }
+
+        function sayNo() {
+            noClickCount++;
+            const noBtn = document.getElementById('no-btn');
+            
+            if (noClickCount === 1 || noClickCount === 2) {
+                // Mover el botón a posición aleatoria
+                const maxX = window.innerWidth - 200;
+                const maxY = window.innerHeight - 100;
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
+                
+                noBtn.style.position = 'fixed';
+                noBtn.style.left = randomX + 'px';
+                noBtn.style.top = randomY + 'px';
+                noBtn.style.transition = 'all 0.3s';
+            } else if (noClickCount === 3) {
+                // Tercer intento - mostrar pantalla triste
+                backgroundMusic.pause();
+                document.getElementById('main-screen').style.display = 'none';
+                document.getElementById('sad-screen').style.display = 'block';
+                sadMusic.play();
+                createBrokenHearts();
+            }
+        }
+
+        function createFireworks() {
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffd700'];
+            
+            setInterval(() => {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                
+                for (let i = 0; i < 30; i++) {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = x + 'px';
+                    firework.style.top = y + 'px';
+                    firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    const angle = (Math.PI * 2 * i) / 30;
+                    const velocity = 100 + Math.random() * 100;
+                    firework.style.setProperty('--x', Math.cos(angle) * velocity + 'px');
+                    firework.style.setProperty('--y', Math.sin(angle) * velocity + 'px');
+                    
+                    document.body.appendChild(firework);
+                    
+                    setTimeout(() => firework.remove(), 1000);
+                }
+            }, 400);
+        }
+
+        function createBrokenHearts() {
+            setInterval(() => {
+                const brokenHeart = document.createElement('div');
+                brokenHeart.className = 'broken-heart-particle';
+                brokenHeart.innerHTML = '💔';
+                brokenHeart.style.left = Math.random() * window.innerWidth + 'px';
+                brokenHeart.style.animationDuration = (2 + Math.random() * 2) + 's';
+                document.body.appendChild(brokenHeart);
+                
+                setTimeout(() => brokenHeart.remove(), 5000);
+            }, 300);
+        }
+
+        // Mover el botón NO cuando el mouse se acerca (para hacerlo más difícil)
+        document.addEventListener('DOMContentLoaded', function() {
+            const noBtn = document.getElementById('no-btn');
+            
+            noBtn.addEventListener('mouseenter', function() {
+                if (noClickCount < 3 && noClickCount > 0) {
+                    const maxX = window.innerWidth - 200;
+                    const maxY = window.innerHeight - 100;
+                    const randomX = Math.random() * maxX;
+                    const randomY = Math.random() * maxY;
+                    
+                    noBtn.style.position = 'fixed';
+                    noBtn.style.left = randomX + 'px';
+                    noBtn.style.top = randomY + 'px';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
